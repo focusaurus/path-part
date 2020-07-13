@@ -23,9 +23,13 @@ func main() {
 		line := scanner.Text()
 		for _, arg := range flag.Args() {
 			switch arg {
+			case "exts":
+				fallthrough
 			case "extensions":
 				line = filepath.Base(line)
 				line = strings.SplitN(line, ".", 2)[1]
+			case "ext":
+				fallthrough
 			case "extension":
 				line = strings.TrimLeft(filepath.Ext(line), ".")
 			case "last":
