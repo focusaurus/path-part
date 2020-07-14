@@ -46,6 +46,7 @@ examples/subdir1
 examples/subdir1/subdir2
 examples/subdir1
 examples/subdir1
+```
 
 ```
 find examples -type f | ./path-part extensions
