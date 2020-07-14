@@ -16,6 +16,7 @@ import (
 // "zip" is the "extension"
 // "dat.zip" is the "extensions"
 // "info" is the "base"
+
 func main() {
 	flag.Parse()
 	scanner := bufio.NewScanner(os.Stdin)
