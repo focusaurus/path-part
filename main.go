@@ -32,8 +32,14 @@ func main() {
 				fallthrough
 			case "extension":
 				line = strings.TrimLeft(filepath.Ext(line), ".")
+			case "name":
+				fallthrough
 			case "last":
 				line = filepath.Base(line)
+			case "directory":
+				fallthrough
+			case "dirname":
+				fallthrough
 			case "path":
 				line = filepath.Dir(line)
 			case "base":
