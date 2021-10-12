@@ -41,6 +41,8 @@ func main() {
 				fallthrough
 			case "dirname":
 				fallthrough
+			case "dir":
+				fallthrough
 			case "path":
 				line = filepath.Dir(line)
 			case "base":
