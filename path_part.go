@@ -1,11 +1,8 @@
 package pathpart
 
 import (
-	"bufio"
 	"errors"
-	"flag"
 	"fmt"
-	"os"
 	"path/filepath"
 	"strings"
 )
@@ -27,74 +24,54 @@ here's our terminology:
 
 "some/directories" is the "path"
 */
-const (
-	base       = "base"
-	extension  = "extension"
-	extensions = "extensions"
-	name       = "name"
-	path       = "path"
-)
 
-func Parse(line string, partName string) string {
-	switch partName {
-	case base:
-		return strings.SplitN(filepath.Base(line), ".", 2)[0]
-	case extension:
-		return strings.TrimLeft(filepath.Ext(line), ".")
-	case extensions:
-		return strings.SplitN(filepath.Base(line), ".", 2)[1]
-	case name:
-		return filepath.Base(line)
-	case path:
-		return filepath.Dir(line)
-	}
-	return line
+type parser func(string) string
+
+func parseBase(line string) string {
+	return strings.SplitN(filepath.Base(line), ".", 2)[0]
 }
 
-func Normalize(partName string) (string, error) {
-	switch partName {
-	case "base":
-		return base, nil
-	case "exts":
-		fallthrough
-	case "extensions":
-		return extensions, nil
-	case "ext":
-		fallthrough
-	case "extension":
-		return extension, nil
-	case "name":
-		fallthrough
-	case "last":
-		return name, nil
-	case "directory":
-		fallthrough
-	case "dirname":
-		fallthrough
-	case "dir":
-		fallthrough
-	case "path":
-		return path, nil
-	}
-	return partName, errors.New("unrecognized part name: " + partName + ". valid names are extension, extensions, base, and path.")
+func parseExtension(line string) string {
+	return strings.TrimLeft(filepath.Ext(line), ".")
 }
 
-func main() {
-	flag.Parse()
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		line := scanner.Text()
-		for _, partName := range flag.Args() {
-			normalName, err := Normalize(partName)
-			if err != nil {
-				fmt.Println(err)
-				continue
-			}
-			fmt.Println(Parse(line, normalName))
-		}
-	}
+func parseExtensions(line string) string {
+	return strings.SplitN(filepath.Base(line), ".", 2)[1]
+}
 
-	if err := scanner.Err(); err != nil {
-		fmt.Println(err)
+func parseName(line string) string {
+	return filepath.Base(line)
+}
+
+func parsePath(line string) string {
+	return filepath.Dir(line)
+}
+
+var dispatch = map[string]parser{
+	"base":       parseBase,
+	"extensions": parseExtensions,
+	"exts":       parseExtensions,
+	"extension":  parseExtension,
+	"ext":        parseExtension,
+	"name":       parseName,
+	"last":       parseName,
+	"basename":   parseName,
+	"path":       parsePath,
+	"directory":  parsePath,
+	"dir":        parsePath,
+	"dirname":    parsePath,
+}
+
+func Parse(line string, partName string) (string, error) {
+	parse, ok := dispatch[strings.ToLower(partName)]
+	if !ok {
+		return line, errors.New("unrecognized part name: " + fmt.Sprintf("%.25s", partName) + `.
+Valid names are:
+base
+extension (alias ext)
+extensions (alias exts)
+name (alias last, basename)
+path (alias directory, dir, dirname)`)
 	}
+	return parse(line), nil
 }
