@@ -35,7 +35,7 @@ const (
 	path       = "path"
 )
 
-func parse(line string, partName string) string {
+func Parse(line string, partName string) string {
 	switch partName {
 	case base:
 		return strings.SplitN(filepath.Base(line), ".", 2)[0]
@@ -51,7 +51,7 @@ func parse(line string, partName string) string {
 	return line
 }
 
-func normalize(partName string) (string, error) {
+func Normalize(partName string) (string, error) {
 	switch partName {
 	case "base":
 		return base, nil
@@ -85,12 +85,12 @@ func main() {
 	for scanner.Scan() {
 		line := scanner.Text()
 		for _, partName := range flag.Args() {
-			normalName, err := normalize(partName)
+			normalName, err := Normalize(partName)
 			if err != nil {
 				fmt.Println(err)
 				continue
 			}
-			fmt.Println(parse(line, normalName))
+			fmt.Println(Parse(line, normalName))
 		}
 	}
 
