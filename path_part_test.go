@@ -38,6 +38,7 @@ func TestParsing(t *testing.T) {
 		{"", "path", ".", "path: empty"},
 		{"/", "path", "/", "path: slash"},
 		{"////", "path", "/", "path: multiple adjacent slashes"},
+		{"foo.bar.baz", "EXTs", "bar.baz", "part names are case insensitive"},
 	}
 
 	for _, test := range tests {
