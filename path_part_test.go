@@ -3,8 +3,8 @@ package pathpart
 import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
 	"strings"
+	"testing"
 )
 
 func TestParsing(t *testing.T) {
