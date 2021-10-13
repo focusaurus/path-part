@@ -8,7 +8,7 @@ This program was written because the widely distributed classic unix `basename` 
 
 ## Usage
 
-`path-part {base|extension|extensions|path|name} < my-file-list.txt`
+`path-part {base|extension|extensions|name|path} < my-file-list.txt`
 
 `path-part` expects a single command line argument, which describes the path component you want to keep, discarding implicitly the other parts of the path. It is an enumeration of valid values as follows:
 
