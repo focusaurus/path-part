@@ -1,4 +1,4 @@
-name: release go project
+name: release
 
 on:
   push:
@@ -30,4 +30,3 @@ jobs:
 
         env:
           GITHUB_TOKEN: ${{ secrets.GO_RELEASER_GITHUB_TOKEN }}
-
